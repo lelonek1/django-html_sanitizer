@@ -23,9 +23,10 @@ class SanitizedCharField(models.CharField):
 
     def to_python(self, value):
         value = super(SanitizedCharField, self).to_python(value)
-        value = bleach.clean(value, tags=self._sanitizer_allowed_tags,
-            attributes=self._sanitizer_allowed_attributes, 
-            styles=self._sanitizer_allowed_styles, strip=self._sanitizer_strip)
+        if value is not None:
+            value = bleach.clean(value, tags=self._sanitizer_allowed_tags,
+                attributes=self._sanitizer_allowed_attributes,
+                styles=self._sanitizer_allowed_styles, strip=self._sanitizer_strip)
         return smart_unicode(value)
 
 
@@ -42,16 +43,18 @@ class SanitizedTextField(models.TextField):
 
     def to_python(self, value):
         value = super(SanitizedTextField, self).to_python(value)
-        value = bleach.clean(value, tags=self._sanitizer_allowed_tags,
-            attributes=self._sanitizer_allowed_attributes, 
-            styles=self._sanitizer_allowed_styles, strip=self._sanitizer_strip)
+        if value is not None:
+            value = bleach.clean(value, tags=self._sanitizer_allowed_tags,
+                attributes=self._sanitizer_allowed_attributes,
+                styles=self._sanitizer_allowed_styles, strip=self._sanitizer_strip)
         return smart_unicode(value)
 
     def get_prep_value(self, value):
         value = super(SanitizedTextField, self).get_prep_value(value)
-        value = bleach.clean(value, tags=self._sanitizer_allowed_tags,
-            attributes=self._sanitizer_allowed_attributes, 
-            styles=self._sanitizer_allowed_styles, strip=self._sanitizer_strip)
+        if value is not None:
+            value = bleach.clean(value, tags=self._sanitizer_allowed_tags,
+                attributes=self._sanitizer_allowed_attributes,
+                styles=self._sanitizer_allowed_styles, strip=self._sanitizer_strip)
         return value
 
 
